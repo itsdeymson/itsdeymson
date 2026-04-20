@@ -535,26 +535,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     if (fullscreenBtn && videoFrame) {
-      fullscreenBtn.addEventListener('click', () => {
-        if (!document.fullscreenElement) {
-          if (videoFrame.requestFullscreen) {
-            videoFrame.requestFullscreen();
-            fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
-          }
-        } else {
-          document.exitFullscreen();
-          fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
-        }
-      });
-      document.addEventListener('fullscreenchange', () => {
-        if (document.fullscreenElement) {
-          fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
-        } else {
-          fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
-          if (isLandscape) exitLandscapeMode();
-        }
-      });
+  fullscreenBtn.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+      if (videoFrame.requestFullscreen) {
+        videoFrame.requestFullscreen();
+        fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+        // Force landscape orientation on mobile when entering fullscreen
+      }
+    } else {
+      document.exitFullscreen();
+      fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
     }
+  });
+  
+  // Listen for fullscreen change to reset button icon
+  document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement) {
+      fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+    } else {
+      fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+    }
+  });
+}
     
     setTimeout(adaptiveResolution, 1000);
     console.log('✅ Video player initialized');
