@@ -1,4 +1,4 @@
-// script.js – Complete functionality with all animations
+// script.js - Complete functionality
 document.addEventListener('DOMContentLoaded', () => {
   console.log('Portfolio initialized');
   
@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // ========== VIDEO PLAYER WITH RESOLUTION SELECTOR + LANDSCAPE MODE ==========
+  // ========== VIDEO PLAYER ==========
   function initVideoPlayer() {
     const video = document.getElementById('introVideo');
     if (!video) return;
@@ -245,8 +245,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoFrame = document.querySelector('.video-frame');
     const videoInfoOverlay = document.getElementById('videoInfoOverlay');
     
-    // Resolution selector elements
- const resolutionContainer = document.querySelector('.resolution-container');
+    const resolutionBtn = document.getElementById('resolutionBtn');
+    const resolutionContainer = document.querySelector('.resolution-container');
     const resolutionMenu = document.getElementById('resolutionMenu');
     const resolutionOptions = document.querySelectorAll('.resolution-option');
     const currentResolutionSpan = document.getElementById('currentResolution');
@@ -254,8 +254,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentResolution = 'auto';
     let sources = {};
     let isMenuOpen = false;
+    let isLandscape = false;
     
-    // Store all video sources
     const sourceElements = video.querySelectorAll('source');
     sourceElements.forEach(source => {
       const res = source.getAttribute('data-res');
@@ -264,7 +264,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     
-    // Toggle menu - SIMPLE: click to open/close
     if (resolutionBtn && resolutionMenu) {
       resolutionBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -277,7 +276,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
       
-      // Close menu when clicking outside
       document.addEventListener('click', (e) => {
         if (!resolutionContainer.contains(e.target)) {
           resolutionMenu.classList.remove('open');
@@ -285,24 +283,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
       
-      // Prevent menu from closing when clicking inside it
       resolutionMenu.addEventListener('click', (e) => {
         e.stopPropagation();
       });
     }
     
-    // Resolution option handler
     resolutionOptions.forEach(option => {
       option.addEventListener('click', (e) => {
         e.stopPropagation();
         const res = option.getAttribute('data-res');
         currentResolution = res;
         
-        // Update active state
         resolutionOptions.forEach(opt => opt.classList.remove('active'));
         option.classList.add('active');
         
-        // Apply resolution
         if (res === 'auto') {
           currentResolutionSpan.textContent = 'Auto';
           adaptiveResolution();
@@ -310,13 +304,11 @@ document.addEventListener('DOMContentLoaded', () => {
           switchResolution(res);
         }
         
-        // Close menu after selection
         resolutionMenu.classList.remove('open');
         isMenuOpen = false;
       });
     });
     
-    // Function to measure network speed
     async function measureNetworkSpeed() {
       const startTime = performance.now();
       try {
@@ -331,7 +323,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     
-    // Adaptive resolution based on network speed
     async function adaptiveResolution() {
       if (currentResolution !== 'auto') return;
       
@@ -350,7 +341,6 @@ document.addEventListener('DOMContentLoaded', () => {
       switchResolution(bestRes, false);
     }
     
-    // Switch video resolution
     function switchResolution(resolution, updateMenu = true) {
       if (resolution === 'auto') {
         adaptiveResolution();
@@ -363,7 +353,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         video.pause();
         
-        // Clear and add new source
         const newSource = document.createElement('source');
         newSource.src = sources[resolution];
         newSource.type = 'video/mp4';
@@ -393,28 +382,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     
-    // Resolution option handlers
-    resolutionOptions.forEach(option => {
-      option.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const res = option.getAttribute('data-res');
-        currentResolution = res;
-        
-        resolutionOptions.forEach(opt => opt.classList.remove('active'));
-        option.classList.add('active');
-        
-        if (res === 'auto') {
-          currentResolutionSpan.textContent = 'Auto';
-          adaptiveResolution();
-        } else {
-          switchResolution(res);
-        }
-        
-        resolutionMenu.classList.remove('show');
-      });
-    });
-    
-    // ===== LANDSCAPE MODE ON MOBILE =====
     function enterLandscapeMode() {
       if (isLandscape) return;
       isLandscape = true;
@@ -422,7 +389,6 @@ document.addEventListener('DOMContentLoaded', () => {
       videoFrame.classList.add('landscape-mode');
       document.body.classList.add('landscape-active');
       
-      // Add exit button if not exists
       if (!document.querySelector('.exit-landscape-btn')) {
         const exitBtn = document.createElement('button');
         exitBtn.className = 'exit-landscape-btn';
@@ -434,7 +400,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.exit-landscape-btn').classList.add('show');
       }
       
-      // Request fullscreen for better experience
       if (videoFrame.requestFullscreen) {
         videoFrame.requestFullscreen().catch(e => console.log('Fullscreen not supported'));
       }
@@ -458,7 +423,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     
-    // Auto-enter landscape on mobile when video plays
     function checkAndEnterLandscape() {
       const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
       if (isMobile && window.innerWidth < 768 && !isLandscape) {
@@ -466,7 +430,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     
-    // Listen for orientation change
     window.addEventListener('orientationchange', () => {
       if (isLandscape && (window.orientation === 0 || window.orientation === 180)) {
         exitLandscapeMode();
@@ -475,7 +438,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     
-    // ===== VIDEO CONTROLS =====
     function formatTime(seconds) {
       if (isNaN(seconds)) return '0:00';
       const mins = Math.floor(seconds / 60);
@@ -594,10 +556,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
     
-    // Start adaptive resolution
     setTimeout(adaptiveResolution, 1000);
-    
-    console.log('✅ Video player with resolution selector + landscape mode initialized');
+    console.log('✅ Video player initialized');
   }
   
   // ========== PROFILE MOUSE FOLLOW ==========
@@ -664,6 +624,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
+  // ========== RESPONSIVE CHECK ==========
+  function checkResponsive() {
+    const grid = document.querySelector('.portfolio-grid-cards');
+    if (grid) {
+      const width = window.innerWidth;
+      if (width < 768) {
+        grid.style.gridTemplateColumns = '1fr';
+      }
+    }
+  }
+  
+  window.addEventListener('resize', checkResponsive);
+  checkResponsive();
+  
   // ========== INITIALIZE EVERYTHING ==========
   initSlideshows();
   initClickableCards();
@@ -675,65 +649,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initNav();
   initProfileFallback();
   
-  console.log('✅ All features ready! Cards uniform and fully visible.');
-
-    // ===== EMERGENCY CARD FIX - FORCE VISIBILITY =====
-  function forceCardVisibility() {
-    console.log('Emergency card fix running...');
-    
-    // Fix all card content
-    const cardContents = document.querySelectorAll('.card-content');
-    console.log(`Found ${cardContents.length} card content elements`);
-    
-    cardContents.forEach(content => {
-      content.style.setProperty('display', 'block', 'important');
-      content.style.setProperty('visibility', 'visible', 'important');
-      content.style.setProperty('opacity', '1', 'important');
-      
-      // Fix headings
-      const headings = content.querySelectorAll('h3');
-      headings.forEach(h => {
-        h.style.setProperty('display', 'block', 'important');
-        h.style.setProperty('visibility', 'visible', 'important');
-        h.style.setProperty('color', '#ffffff', 'important');
-      });
-      
-      // Fix paragraphs
-      const paras = content.querySelectorAll('p');
-      paras.forEach(p => {
-        p.style.setProperty('display', 'block', 'important');
-        p.style.setProperty('visibility', 'visible', 'important');
-        p.style.setProperty('color', '#c5ccde', 'important');
-      });
-      
-      // Fix tech tags
-      const techs = content.querySelectorAll('.card-tech');
-      techs.forEach(t => {
-        t.style.setProperty('display', 'block', 'important');
-        t.style.setProperty('visibility', 'visible', 'important');
-        t.style.setProperty('color', '#8b94b8', 'important');
-      });
-    });
-    
-    // Fix card containers
-    const cards = document.querySelectorAll('.project-card');
-    cards.forEach(card => {
-      card.style.setProperty('display', 'flex', 'important');
-      card.style.setProperty('flex-direction', 'column', 'important');
-      card.style.setProperty('min-height', '420px', 'important');
-    });
-    
-    // Fix grid
-    const grid = document.querySelector('.portfolio-grid-cards');
-    if (grid) {
-      grid.style.setProperty('display', 'grid', 'important');
-      grid.style.setProperty('grid-template-columns', 'repeat(3, 1fr)', 'important');
-      grid.style.setProperty('gap', '2rem', 'important');
-    }
-    
-    console.log('Emergency card fix complete');
-  }
-  
-  // Run emergency fix after a short delay to ensure DOM is ready
-  setTimeout(forceCardVisibility, 100);
+  console.log('✅ All features ready!');
 });
