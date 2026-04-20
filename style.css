@@ -1,4 +1,4 @@
-/* style.css – Clean Working Version */
+/* style.css - COMPLETE WORKING VERSION */
 * {
   margin: 0;
   padding: 0;
@@ -38,12 +38,14 @@ body {
 .logo {
   font-size: 1.8rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
   color: #f0f4fc;
 }
 
 .accent-dot {
   color: #5f6bff;
   font-size: 2rem;
+  margin-left: 2px;
 }
 
 .nav-links {
@@ -82,6 +84,7 @@ body {
 
 .nav-cta:hover {
   background: #5f6bff;
+  border-color: #5f6bff;
 }
 
 /* ===== SECTIONS ===== */
@@ -133,12 +136,14 @@ body {
   align-items: center;
   gap: 0.6rem;
   margin-bottom: 1rem;
+  font-size: 1.4rem;
 }
 
 .nickname-label {
   font-size: 1rem;
   color: #8e98c0;
   text-transform: uppercase;
+  letter-spacing: 2px;
   background: rgba(95, 107, 255, 0.1);
   padding: 0.2rem 0.8rem;
   border-radius: 30px;
@@ -150,11 +155,13 @@ body {
   background: linear-gradient(145deg, #ffffff, #d0d9ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .accent {
   color: #5f6bff;
   font-weight: 700;
+  text-shadow: 0 0 10px rgba(95, 107, 255, 0.4);
 }
 
 .role-badge {
@@ -179,10 +186,10 @@ body {
 }
 
 .stats {
+  list-style: none;
   display: flex;
   flex-wrap: wrap;
   gap: 2.5rem;
-  list-style: none;
   margin-bottom: 3rem;
 }
 
@@ -199,6 +206,7 @@ body {
   background: linear-gradient(135deg, #ffffff, #b7c2ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 0.2rem;
 }
 
@@ -242,6 +250,7 @@ body {
   background: rgba(95, 107, 255, 0.1);
 }
 
+/* Profile Right */
 .profile-right {
   display: flex;
   flex-direction: column;
@@ -290,6 +299,7 @@ body {
   margin-top: 1rem;
   font-size: 0.8rem;
   color: #959ec3;
+  letter-spacing: 2px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -329,7 +339,7 @@ body {
 
 /* ===== VIDEO SECTION ===== */
 .video-section {
-  padding: 2rem 2rem 4rem;
+  padding: 2rem 2rem 4rem 2rem;
 }
 
 .video-container {
@@ -536,7 +546,6 @@ body {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  transition: all 0.2s;
 }
 
 .resolution-btn:hover {
@@ -549,12 +558,10 @@ body {
   right: 0;
   margin-bottom: 0.5rem;
   background: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(10px);
   border-radius: 12px;
   padding: 0.4rem;
   display: none;
   flex-direction: column;
-  gap: 0.2rem;
   min-width: 130px;
   z-index: 1000;
 }
@@ -572,7 +579,6 @@ body {
   cursor: pointer;
   border-radius: 6px;
   font-size: 0.75rem;
-  transition: all 0.2s;
 }
 
 .resolution-option:hover {
@@ -583,48 +589,6 @@ body {
 .resolution-option.active {
   background: #5f6bff;
   color: white;
-}
-
-/* ===== LANDSCAPE MODE ===== */
-.video-frame.landscape-mode {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  z-index: 10000 !important;
-  background: black !important;
-}
-
-.video-frame.landscape-mode .intro-video {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: contain !important;
-}
-
-.exit-landscape-btn {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  background: rgba(0, 0, 0, 0.6);
-  border: none;
-  color: white;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 10002;
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
-
-.exit-landscape-btn.show {
-  display: flex;
-}
-
-body.landscape-active {
-  overflow: hidden !important;
 }
 
 /* ===== ABOUT SECTION ===== */
@@ -710,20 +674,21 @@ body.landscape-active {
   text-transform: uppercase;
 }
 
-/* ===== PORTFOLIO CARDS - MAIN STYLES ===== */
+/* ===== PORTFOLIO CARDS - RESPONSIVE ===== */
 .portfolio-grid-cards {
   display: grid;
-  gap: 1.5rem;
+  width: 100%;
   margin: 2rem 0;
 }
 
 /* Mobile: 1 column (default) */
 .portfolio-grid-cards {
   grid-template-columns: 1fr;
+  gap: 1.5rem;
 }
 
 /* Tablet: 2 columns */
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 1023px) {
   .portfolio-grid-cards {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
@@ -749,6 +714,7 @@ body.landscape-active {
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
 }
 
 .project-card:hover {
@@ -758,17 +724,25 @@ body.landscape-active {
 
 .card-media {
   position: relative;
+  width: 100%;
   height: 200px;
   overflow: hidden;
   background: #1a1c24;
   flex-shrink: 0;
 }
 
+/* Mobile card media height */
+@media (max-width: 767px) {
+  .card-media {
+    height: 180px;
+  }
+}
+
 .slideshow-track {
   display: flex;
   width: 100%;
   height: 100%;
-  transition: transform 0.4s ease-in-out;
+  transition: transform 0.4s ease;
 }
 
 .slide-img {
@@ -776,7 +750,6 @@ body.landscape-active {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
 }
 
 .empty-slide {
@@ -786,7 +759,6 @@ body.landscape-active {
   justify-content: center;
   background: linear-gradient(145deg, #2a2e3f, #1a1c2a);
   color: #8b94b8;
-  font-size: 0.9rem;
   text-align: center;
   padding: 1rem;
 }
@@ -796,18 +768,15 @@ body.landscape-active {
   top: 50%;
   transform: translateY(-50%);
   background: rgba(0, 0, 0, 0.6);
-  color: white;
   border: none;
-  border-radius: 50%;
+  color: white;
   width: 30px;
   height: 30px;
+  border-radius: 50%;
   cursor: pointer;
   z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
   opacity: 0;
+  transition: opacity 0.2s;
 }
 
 .project-card:hover .slideshow-btn {
@@ -839,7 +808,6 @@ body.landscape-active {
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.5);
   cursor: pointer;
-  transition: all 0.2s;
 }
 
 .dot.active {
@@ -856,38 +824,43 @@ body.landscape-active {
   backdrop-filter: blur(4px);
   padding: 0.2rem 0.8rem;
   border-radius: 40px;
-  font-size: 0.65rem;
+  font-size: 0.7rem;
   font-weight: 600;
   color: white;
   z-index: 10;
 }
 
-/* CARD CONTENT - VISIBLE BY DEFAULT */
+/* CARD CONTENT - ALWAYS VISIBLE */
 .card-content {
-  padding: 1.2rem;
+  padding: 1rem;
   background: rgba(18, 20, 28, 0.95);
   flex: 1;
+  display: block !important;
+  visibility: visible !important;
 }
 
 .card-content h3 {
-  font-size: 1.1rem;
-  margin-bottom: 0.4rem;
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
   color: #ffffff;
   font-weight: 600;
+  display: block !important;
 }
 
 .card-content p {
   color: #c5ccde;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   line-height: 1.4;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
+  display: block !important;
 }
 
 .card-tech {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   color: #8b94b8;
-  padding-top: 0.4rem;
+  padding-top: 0.3rem;
   border-top: 1px solid rgba(95, 107, 255, 0.2);
+  display: block !important;
 }
 
 .portfolio-footer {
@@ -955,7 +928,6 @@ body.landscape-active {
   color: #aaa;
   font-size: 1.5rem;
   cursor: pointer;
-  z-index: 10;
 }
 
 .panel-close:hover {
@@ -1219,20 +1191,16 @@ body.landscape-active {
     padding: 0.4rem;
   }
   
-  .card-media {
-    height: 180px;
-  }
-  
   .card-content {
-    padding: 1rem;
+    padding: 0.8rem;
   }
   
   .card-content h3 {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
   
   .card-content p {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
 }
 
@@ -1260,5 +1228,28 @@ body.landscape-active {
   
   .card-media {
     height: 160px;
+  }
+}
+
+/* ===== FORCE RESPONSIVE ON ALL DEVICES ===== */
+@media (max-width: 767px) {
+  .portfolio-grid-cards {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+  
+  .project-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 0 1rem 0 !important;
+  }
+  
+  .card-media {
+    width: 100% !important;
+  }
+  
+  .container, .portfolio-section, .portfolio-grid-cards {
+    overflow-x: hidden !important;
   }
 }
