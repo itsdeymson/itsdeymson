@@ -1363,3 +1363,21 @@ body {
   to { transform: rotate(360deg); }
 }
 
+/* ===== MOBILE VIDEO FIX ===== */
+@media (max-width: 768px) {
+  .video-frame {
+    aspect-ratio: 16 / 9;
+  }
+  .intro-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+.video-frame:fullscreen {
+  background: black;
+}
+.video-frame:fullscreen .intro-video {
+  object-fit: contain;
+}
+
