@@ -650,4 +650,13 @@ document.addEventListener('DOMContentLoaded', () => {
   initProfileFallback();
   
   console.log('✅ All features ready!');
+}
+
+);
+
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loader');
+  if (loader) {
+    setTimeout(() => loader.classList.add('hide'), 500);
+  }
 });
