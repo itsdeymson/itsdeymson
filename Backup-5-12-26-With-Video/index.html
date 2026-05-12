@@ -40,15 +40,17 @@
             <div class="role-badge">IT Automation Specialist · Game Artist · Data Entry Expert</div>
             <p class="bio">I help businesses streamline operations through IT automation, data entry optimization, and creative game art. Self-taught in Power Automate, Power BI, and Excel — delivering real solutions that work.</p>
             <ul class="stats">
-              <li class="stat-item"><span class="stat-num">20+</span> Initiatives<br>in 1 Year</li>
-              <li class="stat-item"><span class="stat-num">7</span> Automation<br>Projects</li>
-              <li class="stat-item"><span class="stat-num">100+</span> Comic<br>Panels</li>
-            </ul>
+  <li class="stat-item"><span class="stat-num">20+</span> Initiatives<br>in 1 Year</li>
+  <li class="stat-item"><span class="stat-num">7</span> Automation<br>Projects</li>
+  <li class="stat-item"><span class="stat-num">100+</span> Comic<br>Panels</li>
+</ul>
             <div class="hero-ctas">
-              <a href="#portfolio" class="cta primary">View Work →</a>
-              <a href="#services" class="cta secondary">What I Offer</a>
-              <a href="#contact" class="cta secondary">Hire Me</a>
-            </div>
+  <a href="#portfolio" class="cta primary">View Work →</a>
+  <a href="#services" class="cta secondary">What I Offer</a>
+  <a href="#contact" class="cta secondary">Hire Me</a>
+</div>
+
+
             <div class="tech-ornament"></div>
           </div>
         </div>
@@ -62,89 +64,160 @@
       </div>
     </section>
 
-    <!-- ABOUT SECTION -->
-    <section id="about" class="section about-section">
-      <div class="container">
-        <h2 class="section-title">Three <span class="accent">Sides</span></h2>
-        
-        <div class="about-grid">
-          
-          <!-- LEFT COLUMN -->
-          <div class="about-text">
-            <div class="about-card creative">
-              <h3>🎨 GAME ARTIST (Freelance)</h3>
-              <p>Specializing in game assets, character design, and storyboard illustration. Experienced creating weapons, vanity items, environments, pixel art, and logos. Worked with NFT guilds, game developers, and small business owners. Fast turnaround — consistently delivering ahead of schedule.</p>
-            </div>
+    <!-- VIDEO INTRODUCTION SECTION -->
+    <section id="video-intro" class="section video-section">
+      <div class="video-container">
+        <div class="video-wrapper">
+          <div class="video-glow"></div>
+          <div class="video-frame" id="videoFrame">
+            <video id="introVideo" class="intro-video" poster="images/test.jpg" preload="metadata" playsinline webkit-playsinline>
+              <source src="Video/test.mp4" type="video/mp4" data-res="1080p" data-bitrate="5000000">
+              <source src="Video/test-720p.mp4" type="video/mp4" data-res="720p" data-bitrate="2500000">
+              <source src="Video/test-480p.mp4" type="video/mp4" data-res="480p" data-bitrate="1000000">
+              Your browser does not support the video tag.
+            </video>
             
-            <div class="about-card it">
-              <h3>⚙️ IT AUTOMATION & DATA ENTRY</h3>
-              <p>Self-taught Power Automate and Power BI specialist. Built production-grade automation systems from scratch — including a Borrowing System used operationally. Created multiple Power Automate workflows and Power BI dashboards. Recognized for 20+ process improvement initiatives. I turn manual data entry into automated workflows.</p>
-            </div>
-            
-            <div class="about-card social">
-              <h3>📊 IT SOLUTIONS & DATA OPTIMIZATION</h3>
-              <p>I help businesses solve operational challenges through automation, data entry optimization, and custom dashboards. Excel advanced formulas, SharePoint integration, and workflow automation. Practical solutions that save time and reduce errors.</p>
-            </div>
-            
-            <div class="tech-stack">
-              <span class="stack-item">#Power Automate</span>
-              <span class="stack-item">#Power BI</span>
-              <span class="stack-item">#Excel</span>
-              <span class="stack-item">#SharePoint</span>
-              <span class="stack-item">#Data Entry</span>
-              <span class="stack-item">#Photoshop</span>
-              <span class="stack-item">#Aseprite</span>
+            <div class="video-controls">
+              <button class="video-btn play-pause-btn" id="playPauseBtn">
+                <i class="fas fa-play"></i>
+              </button>
+              <div class="video-progress-container">
+                <div class="video-progress-bar">
+                  <div class="video-progress-fill"></div>
+                </div>
+                <div class="video-time">
+                  <span class="current-time">0:00</span> / <span class="total-time">0:00</span>
+                </div>
+              </div>
+              
+              <div class="resolution-container" id="resolutionContainer">
+                <button class="resolution-btn" id="resolutionBtn">
+                  <i class="fas fa-cog"></i> <span id="currentResolution">Auto</span>
+                </button>
+                <div class="resolution-menu" id="resolutionMenu">
+                  <button class="resolution-option" data-res="auto">Auto (Adaptive)</button>
+                  <button class="resolution-option" data-res="1080p">1080p HD</button>
+                  <button class="resolution-option" data-res="720p">720p HD</button>
+                  <button class="resolution-option" data-res="480p">480p SD</button>
+                </div>
+              </div>
+              
+              <div class="video-volume-container">
+                <button class="video-btn volume-btn">
+                  <i class="fas fa-volume-up"></i>
+                </button>
+                <div class="volume-slider">
+                  <input type="range" min="0" max="100" value="80" class="volume-input">
+                </div>
+              </div>
+              <button class="video-btn fullscreen-btn" id="fullscreenBtn">
+                <i class="fas fa-expand"></i>
+              </button>
             </div>
           </div>
           
-          <!-- RIGHT COLUMN -->
-          <div class="about-highlight">
-            <div class="highlight-card">
-              <span class="highlight-num">20+</span>
-              <span class="highlight-label">INITIATIVES<br>IN 1 YEAR</span>
+          <div class="video-info" id="videoInfoOverlay">
+            <div class="video-badge">
+              <i class="fas fa-play-circle"></i> INTRO VIDEO
             </div>
-            <div class="highlight-card">
-              <span class="highlight-num">7</span>
-              <span class="highlight-label">AUTOMATION<br>PROJECTS</span>
-            </div>
-            <div class="highlight-card">
-              <span class="highlight-num">100+</span>
-              <span class="highlight-label">ART<br>COMMISSIONS</span>
-            </div>
+            <h3 class="video-title">Meet <span class="accent">Deymson</span></h3>
+            <p class="video-description">
+  From self-taught automation to game art — watch how I help businesses streamline operations and bring creative visions to life.
+</p>
+           <div class="video-stats">
+  <div class="video-stat"><i class="fas fa-clock"></i><span>60 sec intro</span></div>
+  <div class="video-stat"><i class="fas fa-chart-line"></i><span>IT + Art</span></div>
+  <div class="video-stat"><i class="fas fa-briefcase"></i><span>Open for work</span></div>
+</div>
           </div>
-          
         </div>
       </div>
     </section>
 
-    <!-- SERVICES SECTION -->
-    <section id="services" class="section services-section">
-      <div class="container">
-        <h2 class="section-title">What I <span class="accent">Offer</span></h2>
-        <div class="services-grid">
-          <div class="service-card">
-            <i class="fas fa-robot"></i>
-            <h3>IT Automation</h3>
-            <p>Power Automate workflows, SharePoint integration, notification systems, and custom automation solutions.</p>
-          </div>
-          <div class="service-card">
-            <i class="fas fa-chart-line"></i>
-            <h3>Data Entry & Dashboards</h3>
-            <p>Excel optimization, Power BI dashboards, data validation, and reporting systems.</p>
-          </div>
-          <div class="service-card">
-            <i class="fas fa-gamepad"></i>
-            <h3>Game Art & Assets</h3>
-            <p>Character design, weapons, environments, pixel art, storyboard illustration, and logos.</p>
-          </div>
-          <div class="service-card">
-            <i class="fas fa-headset"></i>
-            <h3>IT Solutions</h3>
-            <p>Hardware/software troubleshooting, helpdesk support, and process optimization.</p>
-          </div>
+<!-- ABOUT SECTION -->
+<section id="about" class="section about-section">
+  <div class="container">
+    <h2 class="section-title">Three <span class="accent">Sides</span></h2>
+    
+    <div class="about-grid">
+      
+      <!-- LEFT COLUMN - Wrap everything that goes on the left -->
+      <div class="about-text">
+        <div class="about-card creative">
+          <h3>🎨 GAME ARTIST (Freelance)</h3>
+          <p>Specializing in game assets, character design, and storyboard illustration. Experienced creating weapons, vanity items, environments, pixel art, and logos. Worked with NFT guilds, game developers, and small business owners. Fast turnaround — consistently delivering ahead of schedule.</p>
+        </div>
+        
+        <div class="about-card it">
+          <h3>⚙️ IT AUTOMATION & DATA ENTRY</h3>
+          <p>Self-taught Power Automate and Power BI specialist. Built production-grade automation systems from scratch — including a Borrowing System used operationally. Created multiple Power Automate workflows and Power BI dashboards. Recognized for 20+ process improvement initiatives. I turn manual data entry into automated workflows.</p>
+        </div>
+        
+        <div class="about-card social">
+          <h3>📊 IT SOLUTIONS & DATA OPTIMIZATION</h3>
+          <p>I help businesses solve operational challenges through automation, data entry optimization, and custom dashboards. Excel advanced formulas, SharePoint integration, and workflow automation. Practical solutions that save time and reduce errors.</p>
+        </div>
+        
+        <div class="tech-stack">
+          <span class="stack-item">#Power Automate</span>
+          <span class="stack-item">#Power BI</span>
+          <span class="stack-item">#Excel</span>
+          <span class="stack-item">#SharePoint</span>
+          <span class="stack-item">#Data Entry</span>
+          <span class="stack-item">#Photoshop</span>
+          <span class="stack-item">#Aseprite</span>
         </div>
       </div>
-    </section>
+      
+      <!-- RIGHT COLUMN - Wrap everything that goes on the right -->
+      <div class="about-highlight">
+        <div class="highlight-card">
+          <span class="highlight-num">20+</span>
+          <span class="highlight-label">INITIATIVES<br>IN 1 YEAR</span>
+        </div>
+        <div class="highlight-card">
+          <span class="highlight-num">7</span>
+          <span class="highlight-label">AUTOMATION<br>PROJECTS</span>
+        </div>
+        <div class="highlight-card">
+          <span class="highlight-num">100+</span>
+          <span class="highlight-label">ART<br>COMMISSIONS</span>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+
+    <!-- SERVICES SECTION - WHAT I OFFER -->
+<section id="services" class="section services-section">
+  <div class="container">
+    <h2 class="section-title">What I <span class="accent">Offer</span></h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <i class="fas fa-robot"></i>
+        <h3>IT Automation</h3>
+        <p>Power Automate workflows, SharePoint integration, notification systems, and custom automation solutions.</p>
+      </div>
+      <div class="service-card">
+        <i class="fas fa-chart-line"></i>
+        <h3>Data Entry & Dashboards</h3>
+        <p>Excel optimization, Power BI dashboards, data validation, and reporting systems.</p>
+      </div>
+      <div class="service-card">
+  <i class="fas fa-gamepad"></i>
+  <h3>Game Art & Assets</h3>
+  <p>Character design, weapons, environments, pixel art, storyboard illustration, and logos.</p>
+</div>
+      <div class="service-card">
+        <i class="fas fa-headset"></i>
+        <h3>IT Solutions</h3>
+        <p>Hardware/software troubleshooting, helpdesk support, and process optimization.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
     <!-- PORTFOLIO SECTION -->
     <section id="portfolio" class="section portfolio-section">
@@ -198,10 +271,10 @@
               <span class="card-tag">IT Automation</span>
             </div>
             <div class="card-content">
-              <h3>Borrowing System & Automation</h3>
-              <p>Built from scratch using Power Automate and SharePoint. Integrated with Power BI dashboards. Used operationally — reducing manual tracking significantly.</p>
-              <div class="card-tech">Power Automate · Power BI · SharePoint</div>
-            </div>
+  <h3>Borrowing System & Automation</h3>
+  <p>Built from scratch using Power Automate and SharePoint. Integrated with Power BI dashboards. Used operationally — reducing manual tracking significantly.</p>
+  <div class="card-tech">Power Automate · Power BI · SharePoint</div>
+</div>
           </div>
           
           <!-- CARD 3 -->
@@ -243,10 +316,10 @@
               <span class="card-tag">Data Entry</span>
             </div>
             <div class="card-content">
-              <h3>Excel Optimization & Data Entry</h3>
-              <p>20+ process improvement initiatives. Optimized monitoring systems with advanced formulas and data validation. Reduced manual entry errors significantly.</p>
-              <div class="card-tech">Excel · Advanced Formulas · Data Entry</div>
-            </div>
+  <h3>Excel Optimization & Data Entry</h3>
+  <p>20+ process improvement initiatives. Optimized monitoring systems with advanced formulas and data validation. Reduced manual entry errors significantly.</p>
+  <div class="card-tech">Excel · Advanced Formulas · Data Entry</div>
+</div>
           </div>
           
           <!-- CARD 5 -->
@@ -322,14 +395,14 @@
         <h2 class="section-title">Let's <span class="accent">Connect</span></h2>
         <p class="contact-sub">Need IT automation? Data entry solutions? Game art? I'm available for freelance and contract work.</p>
         <div class="contact-actions">
-          <a href="mailto:eop.prof@gmail.com" class="cta primary"><i class="fas fa-envelope"></i> eop.prof@gmail.com</a>
-          <a href="https://cal.com/el-bert-1vxwwy" class="cta secondary" target="_blank"><i class="fas fa-calendar"></i> Book a Call</a>
-          <div class="social-links">
-            <a href="https://www.facebook.com/profile.php?id=61574205688648" class="social-link"><i class="fab fa-facebook"></i> Facebook</a>
-            <a href="https://www.linkedin.com/in/elbert-pangan-854a0a355/" class="social-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
-            <a href="https://www.instagram.com/itsdeymson/" class="social-link"><i class="fab fa-instagram"></i> Instagram</a>
-          </div>
-        </div>
+  <a href="mailto:eop.prof@gmail.com" class="cta primary"><i class="fas fa-envelope"></i> eop.prof@gmail.com</a>
+  <a href="https://cal.com/el-bert-1vxwwy" class="cta secondary" target="_blank"><i class="fas fa-calendar"></i> Book a Call</a>
+  <div class="social-links">
+    <a href="https://www.facebook.com/profile.php?id=61574205688648" class="social-link"><i class="fab fa-facebook"></i> Facebook</a>
+    <a href="https://www.linkedin.com/in/elbert-pangan-854a0a355/" class="social-link"><i class="fab fa-linkedin"></i> LinkedIn</a>
+    <a href="https://www.instagram.com/itsdeymson/" class="social-link"><i class="fab fa-instagram"></i> Instagram</a>
+  </div>
+</div>
         </div>
         <p class="contact-availability">✓ response within 24h</p>
         <p class="contact-nickname">or find me as <span class="accent">@deymson</span> on Discord</p>
@@ -338,19 +411,26 @@
   </main>
 
   <footer class="site-footer">
-    <div class="footer-social">
-      <a href="https://github.com/itsdeymson" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
-      <a href="https://www.linkedin.com/in/elbert-pangan-854a0a355/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
-      <a href="https://www.instagram.com/itsdeymson/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
-      <a href="https://www.facebook.com/profile.php?id=61574205688648" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
-    </div>
-    <p>© 2026 Elbert "Deymson" Pangan — IT Automation · Game Artist · Data Entry</p>
-  </footer>
-
-  <div class="loader" id="loader">
-    <div class="spinner"></div>
+  <div class="footer-social">
+    <a href="https://github.com/itsdeymson" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+    <a href="https://www.linkedin.com/in/elbert-pangan-854a0a355/" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
+    <a href="https://www.instagram.com/itsdeymson/" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+    <a href="https://www.facebook.com/profile.php?id=61574205688648" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
   </div>
+  <p>© 2026 Elbert "Deymson" Pangan — IT Automation · Game Artist · Data Entry</p>
+</footer>
+
+<div class="loader" id="loader">
+  <div class="spinner"></div>
+</div>
 
   <script src="script.js"></script>
+  
+  
+
+  
 </body>
+
+  
+
 </html>
