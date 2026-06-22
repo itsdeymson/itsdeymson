@@ -1,6 +1,6 @@
-// script.js - Complete functionality (VIDEO SECTION REMOVED)
+// script.js - Complete functionality with VIDEO SUPPORT (FIXED FLICKERING)
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('Portfolio initialized - Video section removed');
+  console.log('Portfolio initialized - Video section added');
   
   // ========== SLIDESHOW SYSTEM ==========
   function initSlideshows() {
@@ -50,6 +50,17 @@ document.addEventListener('DOMContentLoaded', () => {
         currentIndex = index;
         track.style.transform = `translateX(-${currentIndex * 100}%)`;
         updateDots();
+        
+        // Pause all videos in track
+        const videos = track.querySelectorAll('video');
+        videos.forEach((video, i) => {
+          if (i === currentIndex) {
+            video.currentTime = 0;
+            video.play().catch(() => {});
+          } else {
+            video.pause();
+          }
+        });
       }
       
       function nextSlide() { goToSlide(currentIndex + 1); }
@@ -102,11 +113,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.project-card');
     cards.forEach(card => {
       card.addEventListener('click', (e) => {
+        // Ignore clicks on slideshow controls
         if (e.target.closest('.slideshow-btn') || e.target.closest('.dot')) {
           return;
         }
         const panelId = card.getAttribute('data-panel');
-        if (panelId) openPanel(panelId);
+        if (panelId) {
+          // Check if panel is already active
+          const targetPanel = document.getElementById(panelId);
+          if (targetPanel && targetPanel.classList.contains('active')) {
+            return; // Don't reopen if already active
+          }
+          openPanel(panelId);
+        }
       });
     });
   }
@@ -118,16 +137,29 @@ document.addEventListener('DOMContentLoaded', () => {
     if (targetPanel) {
       targetPanel.classList.add('active');
       document.body.style.overflow = 'hidden';
+      
+      // Initialize panel gallery only if not already initialized
       const gallery = targetPanel.querySelector('.panel-gallery-container');
       if (gallery && !gallery.hasAttribute('data-init')) {
-        initPanelGallery(gallery);
-        gallery.setAttribute('data-init', 'true');
+        // Check if it's a video panel (panel5)
+        if (panelId === 'panel5') {
+          initVideoPanelGallery();
+          gallery.setAttribute('data-init', 'true');
+        } else {
+          initPanelGallery(gallery);
+          gallery.setAttribute('data-init', 'true');
+        }
       }
     }
   }
   
   function closeAllPanels() {
-    document.querySelectorAll('.panel').forEach(panel => panel.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(panel => {
+      panel.classList.remove('active');
+      // Pause any videos in panels
+      const videos = panel.querySelectorAll('video');
+      videos.forEach(video => video.pause());
+    });
     document.body.style.overflow = '';
   }
   
@@ -174,13 +206,117 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
+  // ========== VIDEO PANEL GALLERY (FIXED FLICKERING) ==========
+  function initVideoPanelGallery() {
+    const panel = document.getElementById('panel5');
+    if (!panel) return;
+    
+    // Check if already initialized
+    if (panel.hasAttribute('data-video-init')) {
+      return;
+    }
+    panel.setAttribute('data-video-init', 'true');
+    
+    const container = panel.querySelector('.panel-gallery-container');
+    if (!container) return;
+    
+    const mainVideo = container.querySelector('.gallery-main-video');
+    const thumbnails = container.querySelectorAll('.video-thumb');
+    const prevBtn = container.querySelector('.gallery-nav.prev');
+    const nextBtn = container.querySelector('.gallery-nav.next');
+    
+    if (!mainVideo || thumbnails.length === 0) return;
+    
+    let currentIndex = 0;
+    const videoSources = [];
+    
+    thumbnails.forEach((thumb, idx) => {
+      const src = thumb.getAttribute('data-video');
+      videoSources.push(src);
+      
+      thumb.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentIndex = idx;
+        loadVideo(src);
+        updateActiveThumb();
+      });
+    });
+    
+    function loadVideo(src) {
+      mainVideo.pause();
+      mainVideo.src = src;
+      mainVideo.load();
+      mainVideo.play().catch(() => {});
+    }
+    
+    function updateActiveThumb() {
+      thumbnails.forEach((thumb, idx) => {
+        thumb.classList.toggle('active', idx === currentIndex);
+      });
+    }
+    
+    function goToVideo(index) {
+      if (index < 0) index = videoSources.length - 1;
+      if (index >= videoSources.length) index = 0;
+      currentIndex = index;
+      loadVideo(videoSources[currentIndex]);
+      updateActiveThumb();
+    }
+    
+    // Remove old event listeners by cloning and replacing
+    const newPrevBtn = prevBtn.cloneNode(true);
+    const newNextBtn = nextBtn.cloneNode(true);
+    if (prevBtn) {
+      prevBtn.parentNode.replaceChild(newPrevBtn, prevBtn);
+      newPrevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        goToVideo(currentIndex - 1);
+      });
+    }
+    
+    if (nextBtn) {
+      nextBtn.parentNode.replaceChild(newNextBtn, nextBtn);
+      newNextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        goToVideo(currentIndex + 1);
+      });
+    }
+    
+    // Pause video when panel closes
+    const closeBtn = panel.querySelector('.panel-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        mainVideo.pause();
+      });
+    }
+    
+    // Also pause when clicking outside panel
+    panel.addEventListener('click', (e) => {
+      if (e.target === panel) {
+        mainVideo.pause();
+      }
+    });
+    
+    // Load first video initially
+    if (videoSources.length > 0) {
+      mainVideo.src = videoSources[0];
+      mainVideo.load();
+    }
+  }
+  
   // ========== PANEL TRIGGERS ==========
   function initPanelTriggers() {
     document.querySelectorAll('.panel-trigger').forEach(trigger => {
       trigger.addEventListener('click', (e) => {
         e.preventDefault();
         const panelId = trigger.getAttribute('data-panel');
-        if (panelId) openPanel(panelId);
+        if (panelId) {
+          const targetPanel = document.getElementById(panelId);
+          if (targetPanel && targetPanel.classList.contains('active')) {
+            return; // Don't reopen if already active
+          }
+          openPanel(panelId);
+        }
       });
     });
   }
@@ -316,8 +452,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initProfileAnimation();
   initNav();
   initProfileFallback();
+  // Video panel is initialized when opened via openPanel()
   
-  console.log('✅ All features ready! Video section has been removed.');
+  console.log('✅ All features ready! Video section has been added.');
 });
 
 window.addEventListener('load', () => {
