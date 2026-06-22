@@ -332,36 +332,73 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllPanels(); });
   }
   
-  // ========== MASTER GALLERY ==========
+  // ========== MASTER GALLERY (FIXED TO INCLUDE VIDEOS) ==========
   function initMasterGallery() {
     const gallery = document.getElementById('masterGalleryGrid');
     if (!gallery) return;
     
-    const allImages = [];
+    const allItems = [];
+    
     document.querySelectorAll('.project-card').forEach((card, idx) => {
       const title = card.querySelector('.card-content h3')?.innerText || `Project ${idx + 1}`;
-      card.querySelectorAll('.slide-img').forEach(img => {
-        if (img.src && !img.src.includes('empty')) {
-          allImages.push({ src: img.src, title: title });
+      
+      // Get all image slides
+      card.querySelectorAll('.slide-img').forEach(slide => {
+        // Check if it's an image (has src attribute and is IMG element)
+        if (slide.tagName === 'IMG' && slide.src && !slide.src.includes('empty')) {
+          allItems.push({ 
+            type: 'image', 
+            src: slide.src, 
+            title: title 
+          });
+        }
+        // Check if it's a video
+        else if (slide.tagName === 'VIDEO') {
+          const source = slide.querySelector('source');
+          const src = source ? source.getAttribute('src') : slide.getAttribute('src');
+          if (src) {
+            allItems.push({ 
+              type: 'video', 
+              src: src, 
+              title: title 
+            });
+          }
         }
       });
     });
     
     gallery.innerHTML = '';
-    if (allImages.length === 0) {
-      gallery.innerHTML = '<p style="text-align:center; color:#8891b5; grid-column:1/-1;">No images yet. Add your work to see them here!</p>';
+    
+    if (allItems.length === 0) {
+      gallery.innerHTML = '<p style="text-align:center; color:#8891b5; grid-column:1/-1;">No content yet. Add your work to see them here!</p>';
       return;
     }
     
-    allImages.forEach(img => {
-      const item = document.createElement('div');
-      item.className = 'master-gallery-item';
-      item.style.cssText = 'cursor:pointer; border-radius:16px; overflow:hidden; background:#1a1c24; transition:transform 0.2s;';
-      item.innerHTML = `<img src="${img.src}" style="width:100%; height:150px; object-fit:cover;"><div style="padding:8px; font-size:12px; text-align:center; color:#b1b9d4;">${img.title}</div>`;
-      item.addEventListener('mouseenter', () => item.style.transform = 'scale(1.02)');
-      item.addEventListener('mouseleave', () => item.style.transform = 'scale(1)');
-      item.addEventListener('click', () => window.open(img.src, '_blank'));
-      gallery.appendChild(item);
+    allItems.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'master-gallery-item';
+      div.style.cssText = 'cursor:pointer; border-radius:16px; overflow:hidden; background:#1a1c24; transition:transform 0.2s;';
+      
+      if (item.type === 'video') {
+        div.innerHTML = `
+          <video style="width:100%; height:150px; object-fit:cover;" muted playsinline>
+            <source src="${item.src}" type="video/mp4">
+          </video>
+          <div style="padding:8px; font-size:12px; text-align:center; color:#b1b9d4;">🎬 ${item.title}</div>
+        `;
+      } else {
+        div.innerHTML = `
+          <img src="${item.src}" style="width:100%; height:150px; object-fit:cover;">
+          <div style="padding:8px; font-size:12px; text-align:center; color:#b1b9d4;">${item.title}</div>
+        `;
+      }
+      
+      div.addEventListener('mouseenter', () => div.style.transform = 'scale(1.02)');
+      div.addEventListener('mouseleave', () => div.style.transform = 'scale(1)');
+      div.addEventListener('click', () => {
+        window.open(item.src, '_blank');
+      });
+      gallery.appendChild(div);
     });
   }
   
