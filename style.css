@@ -752,7 +752,7 @@ body {
   opacity: 1;
 }
 
-/* Video Thumbnails */
+/* Video Thumbnails - UPDATED FOR 8 VIDEOS */
 .video-thumb {
   width: 80px;
   height: 60px;
@@ -793,6 +793,18 @@ body {
 .video-thumb:hover {
   opacity: 0.9;
   transform: scale(1.05);
+}
+
+/* Responsive adjustments for 8 video thumbnails */
+@media (max-width: 600px) {
+  .video-thumb {
+    width: 60px;
+    height: 45px;
+  }
+  .video-thumb span {
+    font-size: 6px;
+    padding: 0 4px;
+  }
 }
 
 .panel-text {
@@ -1077,15 +1089,6 @@ body {
   
   .card-content p {
     font-size: 0.7rem;
-  }
-  
-  .video-thumb {
-    width: 60px;
-    height: 45px;
-  }
-  .video-thumb span {
-    font-size: 6px;
-    padding: 0 4px;
   }
 }
 
