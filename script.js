@@ -1,4 +1,4 @@
-// script.js - Complete functionality with VIDEO SUPPORT (FIXED FLICKERING)
+// script.js - Complete functionality with VIDEO SUPPORT (FIXED FLICKERING & PANEL 6 SUPPORT)
 document.addEventListener('DOMContentLoaded', () => {
   console.log('Portfolio initialized - Video section added');
   
@@ -141,9 +141,9 @@ document.addEventListener('DOMContentLoaded', () => {
       // Initialize panel gallery only if not already initialized
       const gallery = targetPanel.querySelector('.panel-gallery-container');
       if (gallery && !gallery.hasAttribute('data-init')) {
-        // Check if it's a video panel (panel5)
-        if (panelId === 'panel5') {
-          initVideoPanelGallery();
+        // Check if it's a video panel (panel5 or panel6)
+        if (panelId === 'panel5' || panelId === 'panel6') {
+          initVideoPanelGallery(panelId);
           gallery.setAttribute('data-init', 'true');
         } else {
           initPanelGallery(gallery);
@@ -206,9 +206,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   
-  // ========== VIDEO PANEL GALLERY (FIXED FLICKERING) ==========
-  function initVideoPanelGallery() {
-    const panel = document.getElementById('panel5');
+  // ========== VIDEO PANEL GALLERY (FIXED FLICKERING & SUPPORTS PANEL 5 & 6) ==========
+  function initVideoPanelGallery(panelId) {
+    const panel = document.getElementById(panelId);
     if (!panel) return;
     
     // Check if already initialized
@@ -263,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
       updateActiveThumb();
     }
     
-    // Remove old event listeners by cloning and replacing
+    // Remove old event listeners by cloning and replacing for clean arrows
     const newPrevBtn = prevBtn.cloneNode(true);
     const newNextBtn = nextBtn.cloneNode(true);
     if (prevBtn) {
