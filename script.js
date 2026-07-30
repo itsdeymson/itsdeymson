@@ -1,6 +1,6 @@
-// script.js - Complete functionality with VIDEO SUPPORT (FIXED FLICKERING & PANEL 6 SUPPORT)
+// script.js - OPTIMIZED PERFORMANCE VERSION (Lazy Load, Reduced Lag)
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('Portfolio initialized - Video section added');
+  console.log('Portfolio initialized - OPTIMIZED');
   
   // ========== SLIDESHOW SYSTEM ==========
   function initSlideshows() {
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         track.style.transform = `translateX(-${currentIndex * 100}%)`;
         updateDots();
         
-        // Pause all videos in track
+        // Smart video pausing for performance
         const videos = track.querySelectorAll('video');
         videos.forEach((video, i) => {
           if (i === currentIndex) {
@@ -113,17 +113,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const cards = document.querySelectorAll('.project-card');
     cards.forEach(card => {
       card.addEventListener('click', (e) => {
-        // Ignore clicks on slideshow controls
-        if (e.target.closest('.slideshow-btn') || e.target.closest('.dot')) {
-          return;
-        }
+        if (e.target.closest('.slideshow-btn') || e.target.closest('.dot')) return;
         const panelId = card.getAttribute('data-panel');
         if (panelId) {
-          // Check if panel is already active
           const targetPanel = document.getElementById(panelId);
-          if (targetPanel && targetPanel.classList.contains('active')) {
-            return; // Don't reopen if already active
-          }
+          if (targetPanel && targetPanel.classList.contains('active')) return;
           openPanel(panelId);
         }
       });
@@ -138,10 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
       targetPanel.classList.add('active');
       document.body.style.overflow = 'hidden';
       
-      // Initialize panel gallery only if not already initialized
       const gallery = targetPanel.querySelector('.panel-gallery-container');
       if (gallery && !gallery.hasAttribute('data-init')) {
-        // Check if it's a video panel (panel5 or panel6)
         if (panelId === 'panel5' || panelId === 'panel6') {
           initVideoPanelGallery(panelId);
           gallery.setAttribute('data-init', 'true');
@@ -156,9 +148,11 @@ document.addEventListener('DOMContentLoaded', () => {
   function closeAllPanels() {
     document.querySelectorAll('.panel').forEach(panel => {
       panel.classList.remove('active');
-      // Pause any videos in panels
       const videos = panel.querySelectorAll('video');
-      videos.forEach(video => video.pause());
+      videos.forEach(video => {
+        video.pause();
+        video.src = ''; // Clear memory to reduce lag
+      });
     });
     document.body.style.overflow = '';
   }
@@ -168,7 +162,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const thumbs = container.querySelectorAll('.thumb');
     const prevBtn = container.querySelector('.gallery-nav.prev');
     const nextBtn = container.querySelector('.gallery-nav.next');
-    
     if (!mainImg || thumbs.length === 0) return;
     
     let currentIndex = 0;
@@ -184,37 +177,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     function updateActiveThumb() {
-      thumbs.forEach((thumb, idx) => {
-        thumb.classList.toggle('active', idx === currentIndex);
-      });
+      thumbs.forEach((thumb, idx) => thumb.classList.toggle('active', idx === currentIndex));
     }
     
-    if (prevBtn) {
-      prevBtn.addEventListener('click', () => {
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        mainImg.src = images[currentIndex];
-        updateActiveThumb();
-      });
-    }
-    
-    if (nextBtn) {
-      nextBtn.addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % images.length;
-        mainImg.src = images[currentIndex];
-        updateActiveThumb();
-      });
-    }
+    if (prevBtn) prevBtn.addEventListener('click', () => { currentIndex = (currentIndex - 1 + images.length) % images.length; mainImg.src = images[currentIndex]; updateActiveThumb(); });
+    if (nextBtn) nextBtn.addEventListener('click', () => { currentIndex = (currentIndex + 1) % images.length; mainImg.src = images[currentIndex]; updateActiveThumb(); });
   }
   
-  // ========== VIDEO PANEL GALLERY (FIXED FLICKERING & SUPPORTS PANEL 5 & 6) ==========
+  // ========== VIDEO PANEL GALLERY (Performance Optimized) ==========
   function initVideoPanelGallery(panelId) {
     const panel = document.getElementById(panelId);
-    if (!panel) return;
-    
-    // Check if already initialized
-    if (panel.hasAttribute('data-video-init')) {
-      return;
-    }
+    if (!panel || panel.hasAttribute('data-video-init')) return;
     panel.setAttribute('data-video-init', 'true');
     
     const container = panel.querySelector('.panel-gallery-container');
@@ -224,8 +197,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const thumbnails = container.querySelectorAll('.video-thumb');
     const prevBtn = container.querySelector('.gallery-nav.prev');
     const nextBtn = container.querySelector('.gallery-nav.next');
-    
     if (!mainVideo || thumbnails.length === 0) return;
+    
+    // Set videos to NOT load until clicked (Massive performance boost)
+    mainVideo.setAttribute('preload', 'none');
     
     let currentIndex = 0;
     const videoSources = [];
@@ -233,7 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
     thumbnails.forEach((thumb, idx) => {
       const src = thumb.getAttribute('data-video');
       videoSources.push(src);
-      
       thumb.addEventListener('click', (e) => {
         e.stopPropagation();
         currentIndex = idx;
@@ -250,9 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function updateActiveThumb() {
-      thumbnails.forEach((thumb, idx) => {
-        thumb.classList.toggle('active', idx === currentIndex);
-      });
+      thumbnails.forEach((thumb, idx) => thumb.classList.toggle('active', idx === currentIndex));
     }
     
     function goToVideo(index) {
@@ -263,45 +235,21 @@ document.addEventListener('DOMContentLoaded', () => {
       updateActiveThumb();
     }
     
-    // Remove old event listeners by cloning and replacing for clean arrows
     const newPrevBtn = prevBtn.cloneNode(true);
     const newNextBtn = nextBtn.cloneNode(true);
     if (prevBtn) {
       prevBtn.parentNode.replaceChild(newPrevBtn, prevBtn);
-      newPrevBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        goToVideo(currentIndex - 1);
-      });
+      newPrevBtn.addEventListener('click', (e) => { e.stopPropagation(); goToVideo(currentIndex - 1); });
     }
-    
     if (nextBtn) {
       nextBtn.parentNode.replaceChild(newNextBtn, nextBtn);
-      newNextBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        goToVideo(currentIndex + 1);
-      });
+      newNextBtn.addEventListener('click', (e) => { e.stopPropagation(); goToVideo(currentIndex + 1); });
     }
     
-    // Pause video when panel closes
     const closeBtn = panel.querySelector('.panel-close');
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        mainVideo.pause();
-      });
-    }
+    if (closeBtn) closeBtn.addEventListener('click', () => { mainVideo.pause(); mainVideo.src = ''; });
     
-    // Also pause when clicking outside panel
-    panel.addEventListener('click', (e) => {
-      if (e.target === panel) {
-        mainVideo.pause();
-      }
-    });
-    
-    // Load first video initially
-    if (videoSources.length > 0) {
-      mainVideo.src = videoSources[0];
-      mainVideo.load();
-    }
+    panel.addEventListener('click', (e) => { if (e.target === panel) { mainVideo.pause(); mainVideo.src = ''; } });
   }
   
   // ========== PANEL TRIGGERS ==========
@@ -312,9 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const panelId = trigger.getAttribute('data-panel');
         if (panelId) {
           const targetPanel = document.getElementById(panelId);
-          if (targetPanel && targetPanel.classList.contains('active')) {
-            return; // Don't reopen if already active
-          }
+          if (targetPanel && targetPanel.classList.contains('active')) return;
           openPanel(panelId);
         }
       });
@@ -323,54 +269,33 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // ========== CLOSE BUTTONS ==========
   function initCloseButtons() {
-    document.querySelectorAll('.panel-close').forEach(btn => {
-      btn.addEventListener('click', closeAllPanels);
-    });
-    document.querySelectorAll('.panel').forEach(panel => {
-      panel.addEventListener('click', (e) => { if (e.target === panel) closeAllPanels(); });
-    });
+    document.querySelectorAll('.panel-close').forEach(btn => btn.addEventListener('click', closeAllPanels));
+    document.querySelectorAll('.panel').forEach(panel => panel.addEventListener('click', (e) => { if (e.target === panel) closeAllPanels(); }));
     window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllPanels(); });
   }
   
-  // ========== MASTER GALLERY (FIXED TO INCLUDE VIDEOS) ==========
+  // ========== MASTER GALLERY ==========
   function initMasterGallery() {
     const gallery = document.getElementById('masterGalleryGrid');
     if (!gallery) return;
     
     const allItems = [];
-    
     document.querySelectorAll('.project-card').forEach((card, idx) => {
       const title = card.querySelector('.card-content h3')?.innerText || `Project ${idx + 1}`;
-      
-      // Get all image slides
       card.querySelectorAll('.slide-img').forEach(slide => {
-        // Check if it's an image (has src attribute and is IMG element)
         if (slide.tagName === 'IMG' && slide.src && !slide.src.includes('empty')) {
-          allItems.push({ 
-            type: 'image', 
-            src: slide.src, 
-            title: title 
-          });
-        }
-        // Check if it's a video
-        else if (slide.tagName === 'VIDEO') {
+          allItems.push({ type: 'image', src: slide.src, title: title });
+        } else if (slide.tagName === 'VIDEO') {
           const source = slide.querySelector('source');
           const src = source ? source.getAttribute('src') : slide.getAttribute('src');
-          if (src) {
-            allItems.push({ 
-              type: 'video', 
-              src: src, 
-              title: title 
-            });
-          }
+          if (src) allItems.push({ type: 'video', src: src, title: title });
         }
       });
     });
     
     gallery.innerHTML = '';
-    
     if (allItems.length === 0) {
-      gallery.innerHTML = '<p style="text-align:center; color:#8891b5; grid-column:1/-1;">No content yet. Add your work to see them here!</p>';
+      gallery.innerHTML = '<p style="text-align:center; color:#8891b5; grid-column:1/-1;">No content yet.</p>';
       return;
     }
     
@@ -378,31 +303,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const div = document.createElement('div');
       div.className = 'master-gallery-item';
       div.style.cssText = 'cursor:pointer; border-radius:16px; overflow:hidden; background:#1a1c24; transition:transform 0.2s;';
-      
       if (item.type === 'video') {
-        div.innerHTML = `
-          <video style="width:100%; height:150px; object-fit:cover;" muted playsinline>
-            <source src="${item.src}" type="video/mp4">
-          </video>
-          <div style="padding:8px; font-size:12px; text-align:center; color:#b1b9d4;">🎬 ${item.title}</div>
-        `;
+        div.innerHTML = `<video style="width:100%; height:150px; object-fit:cover;" muted playsinline preload="none"><source src="${item.src}" type="video/mp4"></video><div style="padding:8px; font-size:12px; text-align:center; color:#b1b9d4;">🎬 ${item.title}</div>`;
       } else {
-        div.innerHTML = `
-          <img src="${item.src}" style="width:100%; height:150px; object-fit:cover;">
-          <div style="padding:8px; font-size:12px; text-align:center; color:#b1b9d4;">${item.title}</div>
-        `;
+        div.innerHTML = `<img src="${item.src}" style="width:100%; height:150px; object-fit:cover;"><div style="padding:8px; font-size:12px; text-align:center; color:#b1b9d4;">${item.title}</div>`;
       }
-      
-      div.addEventListener('mouseenter', () => div.style.transform = 'scale(1.02)');
-      div.addEventListener('mouseleave', () => div.style.transform = 'scale(1)');
-      div.addEventListener('click', () => {
-        window.open(item.src, '_blank');
-      });
+      div.addEventListener('click', () => window.open(item.src, '_blank'));
       gallery.appendChild(div);
     });
   }
   
-  // ========== PROFILE MOUSE FOLLOW ==========
+  // ========== PROFILE ANIMATION & NAV ==========
   function initProfileAnimation() {
     const profileFrame = document.querySelector('.image-frame');
     const profilePic = document.querySelector('.profile-pic');
@@ -414,69 +325,46 @@ document.addEventListener('DOMContentLoaded', () => {
         const centerY = rect.top + rect.height / 2;
         const deltaX = (e.clientX - centerX) / 30;
         const deltaY = (e.clientY - centerY) / 30;
-        const moveX = Math.min(Math.max(deltaX, -8), 8);
-        const moveY = Math.min(Math.max(deltaY, -8), 8);
-        profilePic.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.02)`;
+        profilePic.style.transform = `translate(${Math.min(Math.max(deltaX, -8), 8)}px, ${Math.min(Math.max(deltaY, -8), 8)}px) scale(1.02)`;
       });
-      profileFrame.addEventListener('mouseleave', () => {
-        profilePic.style.transform = 'scale(1)';
-      });
+      profileFrame.addEventListener('mouseleave', () => profilePic.style.transform = 'scale(1)');
     }
   }
   
-  // ========== NAVIGATION ==========
   function initNav() {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
-    
     window.addEventListener('scroll', () => {
       let current = '';
       const scrollPos = window.scrollY + 200;
       sections.forEach(section => {
-        if (scrollPos >= section.offsetTop && scrollPos < section.offsetTop + section.offsetHeight) {
-          current = section.getAttribute('id');
-        }
+        if (scrollPos >= section.offsetTop && scrollPos < section.offsetTop + section.offsetHeight) current = section.getAttribute('id');
       });
       navLinks.forEach(link => {
         link.classList.remove('active');
         if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
       });
     });
-    
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         const href = this.getAttribute('href');
         if (href === '#') return;
         const target = document.querySelector(href);
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth' });
-        }
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
       });
     });
   }
   
-  // ========== PROFILE FALLBACK ==========
   function initProfileFallback() {
     const profilePic = document.getElementById('profileImage');
-    if (profilePic) {
-      profilePic.addEventListener('error', () => {
-        profilePic.src = 'https://via.placeholder.com/400x500?text=EP';
-      });
-    }
+    if (profilePic) profilePic.addEventListener('error', () => profilePic.src = 'https://via.placeholder.com/400x500?text=EP');
   }
   
   // ========== RESPONSIVE CHECK ==========
   function checkResponsive() {
     const grid = document.querySelector('.portfolio-grid-cards');
-    if (grid) {
-      const width = window.innerWidth;
-      if (width < 768) {
-        grid.style.gridTemplateColumns = '1fr';
-      }
-    }
+    if (grid && window.innerWidth < 768) grid.style.gridTemplateColumns = '1fr';
   }
-  
   window.addEventListener('resize', checkResponsive);
   checkResponsive();
   
@@ -489,14 +377,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initProfileAnimation();
   initNav();
   initProfileFallback();
-  // Video panel is initialized when opened via openPanel()
   
-  console.log('✅ All features ready! Video section has been added.');
+  console.log('✅ Optimized features ready!');
 });
 
 window.addEventListener('load', () => {
   const loader = document.getElementById('loader');
-  if (loader) {
-    setTimeout(() => loader.classList.add('hide'), 500);
-  }
+  if (loader) setTimeout(() => loader.classList.add('hide'), 500);
 });
